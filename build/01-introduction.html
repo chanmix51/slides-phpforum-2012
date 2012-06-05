@@ -1,0 +1,1622 @@
+<!DOCTYPE html>
+<!--[if lt IE 7]> <html class="no-js ie6" lang="en"> <![endif]-->
+<!--[if IE 7]>    <html class="no-js ie7" lang="en"> <![endif]-->
+<!--[if IE 8]>    <html class="no-js ie8" lang="en"> <![endif]-->
+<!--[if gt IE 8]><!-->  <html class="no-js" lang="en"> <!--<![endif]-->
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    
+    <title>Tirer parti de Postgresql avec Pomm</title>
+    
+    <meta name="description" content="A jQuery library for modern HTML presentations">
+    <meta name="author" content="Caleb Troughton">
+    <meta name="viewport" content="width=1024, user-scalable=no">
+    
+    <!-- Core and extension CSS files -->
+    <link rel="stylesheet" href="../vendor/deck.js/core/deck.core.css">
+    <link rel="stylesheet" href="../vendor/deck.js/extensions/goto/deck.goto.css">
+    <link rel="stylesheet" href="../vendor/deck.js/extensions/menu/deck.menu.css">
+    <link rel="stylesheet" href="../vendor/deck.js/extensions/navigation/deck.navigation.css">
+    <link rel="stylesheet" href="../vendor/deck.js/extensions/status/deck.status.css">
+    <link rel="stylesheet" href="../vendor/deck.js/extensions/hash/deck.hash.css">
+    
+    <!-- Theme CSS files (menu swaps these out) -->
+    <link rel="stylesheet" href="../vendor/deck.js/themes/style/swiss.css">
+    <link rel="stylesheet" href="../vendor/deck.js/themes/transition/vertical-slide.css">
+    
+    <!-- Custom CSS just for this page -->
+    <link rel="stylesheet" href="theme.css">
+    
+    <script src="../vendor/deck.js/modernizr.custom.js"></script>
+
+</head>
+
+<body class="deck-container">
+
+
+
+<section class="slide" id="intro-0">
+
+
+<div class="block-vcenter">
+<img src="images/edgar.png" />
+</div>
+
+
+</section><section class="slide" id="intro-1">
+
+
+<h3>KnpLabs</h3>
+
+<p><span style="float:right;">
+<img src="images/edgar.svg" alt="" height="50%" width="50%" />
+</span></p>
+
+
+</section><section class="slide" id="intro-2">
+
+
+<h3>Who</h3>
+
+<p><img src="images/greg.jpg" alt="alt" /></p>
+
+<p><br />
+<br />
+<br />
+<br />
+Grégoire HUBERT - CTO
+<br /></p>
+
+<hr />
+
+<p>Working with</p>
+
+<ul>
+<li>Linux depuis 1998.</li>
+<li>PHP, Pg, MySQL depuis 1999.</li>
+<li>Symfony depuis 2006.</li>
+</ul>
+
+
+</section><section class="slide" id="intro-3">
+
+
+<h3>What</h3>
+
+<div class="slide" id="intro-3-1">
+
+
+<p><img src="images/postgres.png" alt="alt" /></p>
+
+<p>Postgresql --
+The most advanced open source relational database system.</p>
+
+
+</div><div class="slide" id="intro-3-2">
+
+
+<p>PHP -- 
+Coding the web !</p>
+
+<p><img src="images/php.png" alt="alt" /></p>
+
+
+</div>
+</section><section class="slide" id="pg-1">
+
+
+<h3>Postgresql</h3>
+
+<ul>
+<li>Est le successeur de Ingres, ré-écrit entièrement par son auteur pour supporter les types et les opérateurs.</li>
+<li>le moteur SQL a été ajouté au MIT en 1995.</li>
+<li>suit le standard SQL2008.</li>
+</ul>
+
+
+</section><section class="slide" id="intro-5">
+
+
+<h3>PHP &amp; Postgresql : la rencontre</h3>
+
+<ul>
+<li>lib native pgsql</li>
+<li>lib d'accès OO unifiée : PDO</li>
+<li>multitude d'ORMs &amp; DBALs (Propel, Doctrine, SimpleORM)</li>
+<li>difficile de structurer et de présenter les données correctement</li>
+</ul>
+
+<div class="slide" id="intro-5-1">
+
+
+<p>Ne peut on pas utiliser les fonctionnalités objets de Postgres pour simplifier la couche PHP ?</p>
+
+
+</div>
+</section><section class="slide" id="intro-4">
+
+
+<h3>A LOVE STORY</h3>
+
+<p align="center"><img src="images/elephants.jpg" height="50%" width="50%" /></p>
+
+
+</section><section class="slide" id="pomm-1">
+
+
+<h3>Pomm</h3>
+
+<ul>
+  <li class="slide">Pomm n'est <strong>PAS</strong> un ORM.</li>
+  <li class="slide">Les schémas Pg sont transformés en namespaces PHP.</li>
+  <li class="slide">Il lie les ensembles à des itérateurs PHP.</li>
+  <li class="slide">Transforme les ROWs en objets élastiques.</li>
+  <li class="slide">Possède un système de conversion de types Pg - PHP.</li>
+  <li class="slide">N'est pas fortement lié aux tables.</li>
+  <li class="slide">Permet aux devs de tirer parti du SQL de Pg.</li>
+  <li class="slide">La base de données est la structure de référence.</li>
+  <li class="slide">Inspecteur de base de données pour générer le code de base.</li>
+</ul>
+
+
+</section><section class="slide" id="missions-1">
+
+
+<h3>Missions</h3>
+
+<ul>
+<li><strong>structure</strong></li>
+<li>souplesse</li>
+<li>puissance</li>
+</ul>
+
+
+</section><section class="slide" id="mission-1">
+
+
+<h3>Mission 1 - structure</h3>
+
+<div class="block-vcenter">
+<img src="images/p179.gif" />
+</div>
+
+
+</section><section class="slide" id="troll-1">
+
+
+<blockquote>
+  <p>Wherever smart people work, doors are unlocked.</p>
+</blockquote>
+
+<p><em>Steve Wozniak</em></p>
+
+
+</section><section class="slide" id="schemas-1">
+
+
+<h3>Schemas dans Postgres</h3>
+
+<ul>
+<li>Contiennent tous les objets de base de données.</li>
+<li>Ils agissent comme des namespaces.</li>
+<li>On peut les utiliser comme des calques via le paramètre <em>search_path</em>.</li>
+<li>Ils sont régis par les ACLs.</li>
+</ul>
+
+
+</section><section class="slide" id="schemas-2">
+
+
+<h3>Schemas</h3>
+
+<pre>
+<span class="lnr">1 </span><span class="Statement">CREATE</span> SCHEMA afup;
+<span class="lnr">2 </span>
+<span class="lnr">3 </span>    <span class="Statement">CREATE</span> <span class="Special">TABLE</span> afup.forum (
+<span class="lnr">4 </span>      name            varchar,
+<span class="lnr">5 </span>      audience_meter  <span class="Type">numeric</span>(<span class="Number">4</span>,<span class="Number">3</span>)[],
+<span class="lnr">6 </span>      created_at      <span class="Type">timestamp</span> <span class="Special">DEFAULT</span> <span class="Function">now</span>(),
+<span class="lnr">7 </span>      is_good         <span class="Type">boolean</span> <span class="Special">DEFAULT</span> <span class="Special">true</span>,
+<span class="lnr">8 </span>      <span class="Special">PRIMARY</span> KEY (name)
+<span class="lnr">9 </span>      )
+</pre>
+
+<ul>
+<li>Les schémas permettent d'oublier les préfixes.</li>
+<li>Les types définissent la structure par contrainte.</li>
+<li>Les tableaux évitent les relations 1-n inutiles.</li>
+</ul>
+
+
+</section><section class="slide" id="schemas-3">
+
+
+<h3>Schemas</h3>
+
+<pre><code>                     Table "afup.forum"
+     Column     |            Type             |   Modifiers   
+----------------+-----------------------------+---------------
+ name           | character varying           | not null
+ audience_meter | numeric(4,3)[]              | 
+ created_at     | timestamp without time zone | default now()
+ is_good        | boolean                     | default true
+Indexes:
+    "forum_pkey" PRIMARY KEY, btree (name)
+</code></pre>
+
+
+</section><section class="slide" id="pdo-1">
+
+
+<h3>Hydrater des objets : PDO</h3>
+
+<pre>
+<span class="lnr"> 1 </span><span class="Special">&lt;?php</span>
+<span class="lnr"> 2 </span>
+<span class="lnr"> 3 </span>   <span class="Structure">class</span> Forum
+<span class="lnr"> 4 </span>   <span class="Special">{</span>
+<span class="lnr"> 5 </span>   <span class="Special">}</span>
+<span class="lnr"> 6 </span>
+<span class="lnr"> 7 </span>   <span class="Operator">$</span><span class="Identifier">pdo</span> <span class="Operator">=</span> <span class="Define">new</span> \<span class="Function">PDO</span><span class="Special">(</span>'<span class="String">pgsql:dbname=greg;host=/var/lib/lxc/perso/rootfs/var/run/postgresql;port=5433</span>', '<span class="String">greg</span>'<span class="Special">)</span>;
+<span class="lnr"> 8 </span>   <span class="Operator">$</span><span class="Identifier">results</span> <span class="Operator">=</span> <span class="Operator">$</span><span class="Identifier">pdo</span><span class="Structure">-&gt;</span>query<span class="Special">(</span>&quot;<span class="String">SELECT * FROM afup.forum</span>&quot;<span class="Special">)</span>;
+<span class="lnr"> 9 </span>   <span class="Operator">$</span><span class="Identifier">forum</span> <span class="Operator">=</span> <span class="Operator">$</span><span class="Identifier">results</span><span class="Structure">-&gt;</span>fetchObject<span class="Special">(</span>'<span class="String">Forum</span>'<span class="Special">)</span>;
+<span class="lnr">10 </span>
+<span class="lnr">11 </span>   <span class="Function">print_r</span><span class="Special">(</span><span class="Operator">$</span><span class="Identifier">forum</span><span class="Special">)</span>;
+</pre>
+
+
+</section><section class="slide" id="pdo-2">
+
+
+<h3>PDO</h3>
+
+<pre><code>Forum Object
+(
+    [name] =&gt; 'yeay 2012'
+    [audience_meter] =&gt; {0.123,1.400,5.001}
+    [created_at] =&gt; 2012-05-22 13:05:21.765971
+    [is_good] =&gt; 1
+)
+</code></pre>
+
+<p>Il faut manuellement :</p>
+
+<ul>
+<li>Transformer les string en objets PHP (tableaux, timestamp etc.)</li>
+<li>Éviter les collisions en namespaçant la classe Forum</li>
+</ul>
+
+
+</section><section class="slide" id="pomm-gen-1">
+
+
+<h3>Générer le mapping</h3>
+
+<pre>
+<span class="lnr"> 1 </span><span class="Special">&lt;?php</span>
+<span class="lnr"> 2 </span>
+<span class="lnr"> 3 </span>  <span class="Operator">$</span><span class="Identifier">loader</span> <span class="Operator">=</span> <span class="Include">require</span><span class="Special">(</span><span class="Constant">__DIR__</span><span class="Operator">.</span>'<span class="String">/vendor/autoload.php</span>'<span class="Special">)</span>;
+<span class="lnr"> 4 </span>
+<span class="lnr"> 5 </span>  <span class="Operator">$</span><span class="Identifier">database</span> <span class="Operator">=</span> <span class="Define">new</span> Pomm\Connection\Database<span class="Special">(</span><span class="Type">array</span><span class="Special">(</span>
+<span class="lnr"> 6 </span>    '<span class="String">dsn</span>' <span class="Operator">=</span><span class="Operator">&gt;</span> '<span class="String">pgsql://greg@!/var/lib/lxc/perso/rootfs/var/run/postgresql!:5433/greg</span>',
+<span class="lnr"> 7 </span>    '<span class="String">name</span>' <span class="Operator">=</span><span class="Operator">&gt;</span> '<span class="String">php_db</span>'
+<span class="lnr"> 8 </span>  <span class="Special">))</span>;
+<span class="lnr"> 9 </span>
+<span class="lnr">10 </span>  <span class="Operator">$</span><span class="Identifier">scan</span> <span class="Operator">=</span> <span class="Define">new</span> Pomm\Tools\ScanSchemaTool<span class="Special">(</span><span class="Type">array</span><span class="Special">(</span>
+<span class="lnr">11 </span>      '<span class="String">schema</span>' <span class="Operator">=</span><span class="Operator">&gt;</span> '<span class="String">afup</span>',
+<span class="lnr">12 </span>      '<span class="String">database</span>' <span class="Operator">=</span><span class="Operator">&gt;</span> <span class="Operator">$</span><span class="Identifier">database</span>,
+<span class="lnr">13 </span>      '<span class="String">prefix_dir</span>' <span class="Operator">=</span><span class="Operator">&gt;</span> <span class="Constant">__DIR__</span><span class="Operator">.</span>&quot;<span class="String">/model</span>&quot;,
+<span class="lnr">14 </span>    <span class="Special">))</span>;
+<span class="lnr">15 </span>
+<span class="lnr">16 </span>  <span class="Operator">$</span><span class="Identifier">scan</span><span class="Structure">-&gt;</span>execute<span class="Special">()</span>;
+</pre>
+
+
+</section><section class="slide" id="pomm-gen-2">
+
+
+<h3>Générer le mapping</h3>
+
+<pre><code>model/
+└── PhpDb
+    └── Afup
+        ├── Base
+        │   └── ForumMap.php
+        ├── ForumMap.php
+        └── Forum.php
+</code></pre>
+
+
+</section><section class="slide" id="mapping-1">
+
+
+<h3>Set mapping</h3>
+
+<pre>
+<span class="lnr"> 1 </span><span class="Special">&lt;?php</span>
+<span class="lnr"> 2 </span>
+<span class="lnr"> 3 </span>    <span class="Structure">namespace</span> PhpDb\Afup\Base;
+<span class="lnr"> 4 </span>
+<span class="lnr"> 5 </span>    <span class="Include">use</span> \Pomm\<span class="Type">Object</span>\BaseObjectMap;
+<span class="lnr"> 6 </span>    <span class="Include">use</span> \Pomm\<span class="Function">Exception</span>\<span class="Function">Exception</span>;
+<span class="lnr"> 7 </span>
+<span class="lnr"> 8 </span>    <span class="Structure">abstract</span> <span class="Structure">class</span> ForumMap <span class="Structure">extends</span> BaseObjectMap
+<span class="lnr"> 9 </span>    <span class="Special">{</span>
+<span class="lnr">10 </span>        <span class="StorageClass">public</span> <span class="Define">function</span> initialize<span class="Special">()</span>
+<span class="lnr">11 </span>        <span class="Special">{</span>
+<span class="lnr">12 </span>
+<span class="lnr">13 </span>            <span class="Operator">$</span><span class="Identifier">this</span><span class="Structure">-&gt;</span>object_class <span class="Operator">=</span>  '<span class="String">PhpDb\Afup\Forum</span>';
+<span class="lnr">14 </span>            <span class="Operator">$</span><span class="Identifier">this</span><span class="Structure">-&gt;</span>object_name  <span class="Operator">=</span>  '<span class="String">afup.forum</span>';
+<span class="lnr">15 </span>
+<span class="lnr">16 </span>            <span class="Operator">$</span><span class="Identifier">this</span><span class="Structure">-&gt;</span>addField<span class="Special">(</span>'<span class="String">name</span>', '<span class="String">varchar</span>'<span class="Special">)</span>;
+<span class="lnr">17 </span>            <span class="Operator">$</span><span class="Identifier">this</span><span class="Structure">-&gt;</span>addField<span class="Special">(</span>'<span class="String">audience_meter</span>', '<span class="String">numeric[]</span>'<span class="Special">)</span>;
+<span class="lnr">18 </span>            <span class="Operator">$</span><span class="Identifier">this</span><span class="Structure">-&gt;</span>addField<span class="Special">(</span>'<span class="String">created_at</span>', '<span class="String">timestamp</span>'<span class="Special">)</span>;
+<span class="lnr">19 </span>            <span class="Operator">$</span><span class="Identifier">this</span><span class="Structure">-&gt;</span>addField<span class="Special">(</span>'<span class="String">is_good</span>', '<span class="String">bool</span>'<span class="Special">)</span>;
+<span class="lnr">20 </span>
+<span class="lnr">21 </span>            <span class="Operator">$</span><span class="Identifier">this</span><span class="Structure">-&gt;</span>pk_fields <span class="Operator">=</span> <span class="Type">array</span><span class="Special">(</span>'<span class="String">name</span>'<span class="Special">)</span>;
+<span class="lnr">22 </span>        <span class="Special">}</span>
+<span class="lnr">23 </span>    <span class="Special">}</span>
+</pre>
+
+
+</section><section class="slide" id="pomm-converter-1">
+
+
+<h3>Hydrateur &amp; convertisseur</h3>
+
+<pre>
+<span class="lnr"> 1 </span><span class="Special">&lt;?php</span>
+<span class="lnr"> 2 </span>
+<span class="lnr"> 3 </span>    <span class="Operator">$</span><span class="Identifier">loader</span> <span class="Operator">=</span> <span class="Include">require</span><span class="Special">(</span><span class="Constant">__DIR__</span><span class="Operator">.</span>'<span class="String">/vendor/autoload.php</span>'<span class="Special">)</span>;
+<span class="lnr"> 4 </span>    <span class="Operator">$</span><span class="Identifier">loader</span><span class="Structure">-&gt;</span><span class="Function">add</span><span class="Special">(</span>'<span class="String">PhpDb</span>', <span class="Constant">__DIR__</span><span class="Operator">.</span>'<span class="String">/model</span>'<span class="Special">)</span>;
+<span class="lnr"> 5 </span>
+<span class="lnr"> 6 </span>    <span class="Operator">$</span><span class="Identifier">database</span> <span class="Operator">=</span> <span class="Define">new</span> Pomm\Connection\Database<span class="Special">(</span><span class="Type">array</span><span class="Special">(</span>
+<span class="lnr"> 7 </span>      '<span class="String">dsn</span>' <span class="Operator">=</span><span class="Operator">&gt;</span> '<span class="String">pgsql://greg@!/var/lib/lxc/perso/rootfs/var/run/postgresql!:5433/greg</span>',
+<span class="lnr"> 8 </span>      '<span class="String">name</span>' <span class="Operator">=</span><span class="Operator">&gt;</span> '<span class="String">php_db</span>'
+<span class="lnr"> 9 </span>    <span class="Special">))</span>;
+<span class="lnr">10 </span>
+<span class="lnr">11 </span>    <span class="Operator">$</span><span class="Identifier">map</span> <span class="Operator">=</span> <span class="Operator">$</span><span class="Identifier">database</span>
+<span class="lnr">12 </span>      <span class="Structure">-&gt;</span>createConnection<span class="Special">()</span>
+<span class="lnr">13 </span>      <span class="Structure">-&gt;</span>getMapFor<span class="Special">(</span>'<span class="String">PhpDb\Afup\Forum</span>'<span class="Special">)</span>
+<span class="lnr">14 </span>      ;
+<span class="lnr">15 </span>
+<span class="lnr">16 </span>      <span class="Operator">$</span><span class="Identifier">forum</span> <span class="Operator">=</span> <span class="Operator">$</span><span class="Identifier">map</span><span class="Structure">-&gt;</span>findAll<span class="Special">()</span><span class="Structure">-&gt;</span>current<span class="Special">()</span>;
+<span class="lnr">17 </span>
+<span class="lnr">18 </span>      <span class="Function">print_r</span><span class="Special">(</span><span class="Operator">$</span><span class="Identifier">forum</span><span class="Special">)</span>;
+</pre>
+
+
+</section><section class="slide" id="pomm-converter-2">
+
+
+<h3>Hydrateur &amp; convertisseur</h3>
+
+<pre>
+<span class="lnr"> 1 </span>PhpDb\Afup\Forum Object
+<span class="lnr"> 2 </span>    (
+<span class="lnr"> 3 </span>        [fields:protected] =<span class="Error">&gt;</span> Array
+<span class="lnr"> 4 </span>            (
+<span class="lnr"> 5 </span>                [name] =<span class="Error">&gt;</span> yeay 2012
+<span class="lnr"> 6 </span>                [audience_meter] =<span class="Error">&gt;</span> Array
+<span class="lnr"> 7 </span>                    (
+<span class="lnr"> 8 </span>                        [0] =<span class="Error">&gt;</span> 0.123
+<span class="lnr"> 9 </span>                        [1] =<span class="Error">&gt;</span> 1.400
+<span class="lnr">10 </span>                        [2] =<span class="Error">&gt;</span> 5.001
+<span class="lnr">11 </span>                    )
+<span class="lnr">12 </span>                [created_at] =<span class="Error">&gt;</span> DateTime Object
+<span class="lnr">13 </span>                    (
+<span class="lnr">14 </span>                        [date] =<span class="Error">&gt;</span> 2012-05-23 07:15:59
+<span class="lnr">15 </span>                        [timezone_type] =<span class="Error">&gt;</span> 3
+<span class="lnr">16 </span>                        [timezone] =<span class="Error">&gt;</span> Europe/Paris
+<span class="lnr">17 </span>                    )
+<span class="lnr">18 </span>                [is_good] =<span class="Error">&gt;</span> 1
+<span class="lnr">19 </span>            )
+<span class="lnr">20 </span>        [status:protected] =<span class="Error">&gt;</span> 1
+<span class="lnr">21 </span>    )
+</pre>
+
+
+</section><section class="slide" id="pomm-converter-3">
+
+
+<h3>Liste des convertisseurs :</h3>
+
+<ul>
+<li>PgArray</li>
+<li>PgBoolean</li>
+<li>PgNumber</li>
+<li>PgString</li>
+<li>PgTimestamp</li>
+<li>PgInterval </li>
+<li>PgBinary</li>
+</ul>
+
+
+</section><section class="slide" id="pomm-converter-4">
+
+
+<h3>Liste des convertisseurs :</h3>
+
+<ul>
+<li>PgPoint</li>
+<li>PgCircle</li>
+<li>PgLSeg</li>
+<li>PgLTree</li>
+<li>PgHStore</li>
+<li>PgEntity</li>
+<li>Collez le votre ici</li>
+</ul>
+
+
+</section><section class="slide" id="pomm-entities-1">
+
+
+<h3>Entités synchronisées</h3>
+
+<p>Ajouter une mesure au tableau :</p>
+
+<pre>
+<span class="lnr">1 </span><span class="Special">&lt;?php</span> <span class="Comment">// ...</span>
+<span class="lnr">2 </span>  <span class="Operator">$</span><span class="Identifier">forum</span> <span class="Operator">=</span> <span class="Operator">$</span><span class="Identifier">map</span><span class="Structure">-&gt;</span>findAll<span class="Special">()</span><span class="Structure">-&gt;</span>current<span class="Special">()</span>;
+<span class="lnr">3 </span>  <span class="Operator">$</span><span class="Identifier">forum</span><span class="Structure">-&gt;</span><span class="Function">add</span><span class="Special">(</span>'<span class="String">audience_meter</span>', '<span class="String">0.00009</span>'<span class="Special">)</span>;
+<span class="lnr">4 </span>
+<span class="lnr">5 </span>  <span class="Operator">$</span><span class="Identifier">map</span><span class="Structure">-&gt;</span>saveOne<span class="Special">(</span><span class="Operator">$</span><span class="Identifier">forum</span><span class="Special">)</span>;
+<span class="lnr">6 </span>  <span class="Function">print_r</span><span class="Special">(</span><span class="Operator">$</span><span class="Identifier">forum</span><span class="Special">)</span>;
+</pre>
+
+<div class="slide" id="pomm-entitites-1-1">
+
+
+<pre><code>PhpDb\Afup\Forum Object
+(
+    [fields:protected] =&gt; Array
+        (
+            [name] =&gt; yeay 2012
+            [audience_meter] =&gt; Array
+                (
+                    [0] =&gt; 0.123
+                    [1] =&gt; 1.400
+                    [2] =&gt; 5.001
+                    [3] =&gt; 0.000
+                )
+            ...
+</code></pre>
+
+
+</div>
+</section><section class="slide" id="pomm-converter-5">
+
+
+<h3>Entités synchronisées</h3>
+
+<pre>
+<span class="lnr">1 </span><span class="Statement">UPDATE</span> afup.forum <span class="Special">SET</span>
+<span class="lnr">2 </span>        audience_meter=<span class="Special">ARRAY</span>[<span class="Number">0</span>.<span class="Number">123</span>,<span class="Number">1</span>.<span class="Number">400</span>,<span class="Number">5</span>.<span class="Number">001</span>,<span class="Number">0</span>.<span class="Number">00009</span>]::<span class="Type">numeric</span>[],
+<span class="lnr">3 </span>        created_at=<span class="Type">timestamp</span> <span class="String">'2012-05-23 07:15:59.986263'</span>,
+<span class="lnr">4 </span>        is_good=<span class="Special">true</span>
+<span class="lnr">5 </span>    <span class="Special">WHERE</span>
+<span class="lnr">6 </span>        name = ?
+<span class="lnr">7 </span>    <span class="Special">RETURNING</span> name, audience_meter, created_at, is_good;
+</pre>
+
+
+</section><section class="slide" id="pomm-entities-2">
+
+
+<h3>Les entités</h3>
+
+<pre>
+<span class="lnr">1 </span><span class="Special">&lt;?php</span> <span class="Comment">// ...</span>
+<span class="lnr">2 </span>  <span class="Operator">$</span><span class="Identifier">forum</span> <span class="Operator">=</span> <span class="Operator">$</span><span class="Identifier">map</span><span class="Structure">-&gt;</span>findAll<span class="Special">()</span><span class="Structure">-&gt;</span>current<span class="Special">()</span>;
+<span class="lnr">3 </span>  <span class="Operator">$</span><span class="Identifier">audience_meter</span> <span class="Operator">=</span> <span class="Operator">$</span><span class="Identifier">forum</span><span class="Structure">-&gt;</span>getAudienceMeter<span class="Special">()</span>;
+<span class="lnr">4 </span>  <span class="Operator">$</span><span class="Identifier">audience_meter</span><span class="Special">[</span><span class="Number">3</span><span class="Special">]</span> <span class="Operator">=</span> <span class="Number">0</span><span class="Number">.001</span>;
+<span class="lnr">5 </span>  <span class="Operator">$</span><span class="Identifier">forum</span><span class="Structure">-&gt;</span>setAudienceMeter<span class="Special">(</span><span class="Operator">$</span><span class="Identifier">audience_meter</span><span class="Special">)</span>;
+<span class="lnr">6 </span>
+<span class="lnr">7 </span>  <span class="Operator">$</span><span class="Identifier">map</span><span class="Structure">-&gt;</span>updateOne<span class="Special">(</span><span class="Operator">$</span><span class="Identifier">forum</span>, <span class="Type">array</span><span class="Special">(</span>'<span class="String">audience_meter</span>'<span class="Special">))</span>;
+</pre>
+
+<div class="slide" id="pomm-entities-2-1">
+
+
+<pre>
+<span class="lnr">1 </span><span class="Statement">UPDATE</span> afup.forum <span class="Special">SET</span>
+<span class="lnr">2 </span>    audience_meter = <span class="Special">ARRAY</span>[<span class="Number">0</span>.<span class="Number">123</span>,<span class="Number">1</span>.<span class="Number">400</span>,<span class="Number">5</span>.<span class="Number">001</span>,<span class="Number">0</span>.<span class="Number">001</span>]::<span class="Type">numeric</span>[]
+<span class="lnr">3 </span>  <span class="Special">WHERE</span>
+<span class="lnr">4 </span>    name = ?
+<span class="lnr">5 </span>  <span class="Special">RETURNING</span> name, audience_meter, created_at, is_good;
+</pre>
+
+
+</div>
+</section><section class="slide" id="table-modification-1">
+
+
+<h3>Modifions la structure</h3>
+
+<pre>
+<span class="lnr">1 </span><span class="Statement">ALTER</span> <span class="Special">TABLE</span> afup.forum ADD <span class="Special">COLUMN</span> options hstore;
+</pre>
+
+<pre><code>                      Table "afup.forum"
+     Column     |            Type             |   Modifiers   
+----------------+-----------------------------+---------------
+ name           | character varying           | not null
+ audience_meter | numeric(4,3)[]              | 
+ created_at     | timestamp without time zone | default now()
+ is_good        | boolean                     | default true
+ options        | hstore                      | 
+Indexes:
+    "forum_pkey" PRIMARY KEY, btree (name)
+</code></pre>
+
+
+</section><section class="slide" id="pomm-gen-3">
+
+
+<h3>Regénérer la classe map</h3>
+
+<pre>
+<span class="lnr"> 1 </span><span class="Special">&lt;?php</span>
+<span class="lnr"> 2 </span>
+<span class="lnr"> 3 </span><span class="Structure">namespace</span> PhpDb\Afup\Base;
+<span class="lnr"> 4 </span>
+<span class="lnr"> 5 </span><span class="Include">use</span> \Pomm\<span class="Type">Object</span>\BaseObjectMap;
+<span class="lnr"> 6 </span><span class="Include">use</span> \Pomm\<span class="Function">Exception</span>\<span class="Function">Exception</span>;
+<span class="lnr"> 7 </span>
+<span class="lnr"> 8 </span><span class="Structure">abstract</span> <span class="Structure">class</span> ForumMap <span class="Structure">extends</span> BaseObjectMap
+<span class="lnr"> 9 </span><span class="Special">{</span>
+<span class="lnr">10 </span>    <span class="StorageClass">public</span> <span class="Define">function</span> initialize<span class="Special">()</span>
+<span class="lnr">11 </span>    <span class="Special">{</span>
+<span class="lnr">12 </span>        <span class="Operator">...</span>
+<span class="lnr">13 </span>    <span class="Operator">$</span><span class="Identifier">this</span><span class="Structure">-&gt;</span>addField<span class="Special">(</span>'<span class="String">is_good</span>', '<span class="String">bool</span>'<span class="Special">)</span>;
+<span class="lnr">14 </span>    <span class="Operator">$</span><span class="Identifier">this</span><span class="Structure">-&gt;</span>addField<span class="Special">(</span>'<span class="String">options</span>', '<span class="String">public.hstore</span>'<span class="Special">)</span>;
+<span class="lnr">15 </span>
+<span class="lnr">16 </span>    <span class="Operator">$</span><span class="Identifier">this</span><span class="Structure">-&gt;</span>pk_fields <span class="Operator">=</span> <span class="Type">array</span><span class="Special">(</span>'<span class="String">name</span>'<span class="Special">)</span>;
+<span class="lnr">17 </span>    <span class="Special">}</span>
+<span class="lnr">18 </span><span class="Special">}</span>
+</pre>
+
+
+</section><section class="slide" id="pomm-entities-3">
+
+
+<h3>Nouvelle entité</h3>
+
+<pre>
+<span class="lnr">1 </span><span class="Special">&lt;?php</span> <span class="Operator">...</span>
+<span class="lnr">2 </span>  <span class="Operator">$</span><span class="Identifier">forum</span> <span class="Operator">=</span> <span class="Operator">$</span><span class="Identifier">map</span><span class="Structure">-&gt;</span>findAll<span class="Special">()</span><span class="Structure">-&gt;</span>current<span class="Special">()</span>;
+<span class="lnr">3 </span>
+<span class="lnr">4 </span>  <span class="Operator">$</span><span class="Identifier">forum</span><span class="Structure">-&gt;</span>setOptions<span class="Special">(</span><span class="Type">array</span><span class="Special">(</span>'<span class="String">micro</span>' <span class="Operator">=</span><span class="Operator">&gt;</span> '<span class="String">sm58</span>', '<span class="String">projecteur</span>' <span class="Operator">=</span><span class="Operator">&gt;</span> <span class="Number">1</span><span class="Special">))</span>;
+<span class="lnr">5 </span>  <span class="Operator">$</span><span class="Identifier">map</span><span class="Structure">-&gt;</span>updateOne<span class="Special">(</span><span class="Operator">$</span><span class="Identifier">forum</span>, <span class="Type">array</span><span class="Special">(</span>'<span class="String">options</span>'<span class="Special">))</span>;
+<span class="lnr">6 </span>
+<span class="lnr">7 </span>  <span class="Function">print_r</span><span class="Special">(</span><span class="Operator">$</span><span class="Identifier">forum</span><span class="Special">)</span>;
+</pre>
+
+
+</section><section class="slide" id="pomm-crash-1">
+
+
+<h3>crash</h3>
+
+<pre><code>Fatal error: Uncaught exception 'Pomm\Exception\Exception' with message 'Could not find a converter for type 'public.hstore'.' in /var/lib/lxc/perso/rootfs/var/www/dev/sflive/afup/vendor/pomm/pomm/Pomm/Connection/Database.php:205
+</code></pre>
+
+
+</section><section class="slide" id="pomm-entities-4">
+
+
+<h3>Nouveau convertisseur</h3>
+
+<pre>
+<span class="lnr"> 1 </span><span class="Special">&lt;?php</span> <span class="Operator">...</span>
+<span class="lnr"> 2 </span>    <span class="Operator">$</span><span class="Identifier">map</span> <span class="Operator">=</span> <span class="Operator">$</span><span class="Identifier">database</span>
+<span class="lnr"> 3 </span>      <span class="Structure">-&gt;</span>registerConverter<span class="Special">(</span>'<span class="String">HStore</span>', <span class="Define">new</span> Pomm\Converter\PgHStore<span class="Special">()</span>, <span class="Type">array</span><span class="Special">(</span>'<span class="String">public.hstore</span>'<span class="Special">))</span>
+<span class="lnr"> 4 </span>      <span class="Structure">-&gt;</span>createConnection<span class="Special">()</span>
+<span class="lnr"> 5 </span>      <span class="Structure">-&gt;</span>getMapFor<span class="Special">(</span>'<span class="String">PhpDb\Afup\Forum</span>'<span class="Special">)</span>
+<span class="lnr"> 6 </span>      ;
+<span class="lnr"> 7 </span>
+<span class="lnr"> 8 </span>    <span class="Operator">$</span><span class="Identifier">forum</span> <span class="Operator">=</span> <span class="Operator">$</span><span class="Identifier">map</span><span class="Structure">-&gt;</span>findAll<span class="Special">()</span><span class="Structure">-&gt;</span>current<span class="Special">()</span>;
+<span class="lnr"> 9 </span>
+<span class="lnr">10 </span>    <span class="Operator">$</span><span class="Identifier">forum</span><span class="Structure">-&gt;</span>setOptions<span class="Special">(</span><span class="Type">array</span><span class="Special">(</span>'<span class="String">micro</span>' <span class="Operator">=</span><span class="Operator">&gt;</span> '<span class="String">sm58</span>', '<span class="String">projecteur</span>' <span class="Operator">=</span><span class="Operator">&gt;</span> <span class="Number">1</span><span class="Special">))</span>;
+<span class="lnr">11 </span>    <span class="Operator">$</span><span class="Identifier">map</span><span class="Structure">-&gt;</span>updateOne<span class="Special">(</span><span class="Operator">$</span><span class="Identifier">forum</span>, <span class="Type">array</span><span class="Special">(</span>'<span class="String">options</span>'<span class="Special">))</span>;
+<span class="lnr">12 </span>
+<span class="lnr">13 </span>    <span class="Function">print_r</span><span class="Special">(</span><span class="Operator">$</span><span class="Identifier">forum</span><span class="Special">)</span>;
+</pre>
+
+
+</section><section class="slide" id="pomm-entities-5">
+
+
+<h3>Nouveau convertisseur</h3>
+
+<pre>
+<span class="lnr">1 </span><span class="Statement">UPDATE</span> afup.forum <span class="Special">SET</span> options = <span class="String">'&quot;micro&quot; =&gt; &quot;sm58&quot;, &quot;projecteur&quot; =&gt; &quot;1&quot;'</span>::hstore <span class="Special">WHERE</span> name = ? <span class="Special">RETURNING</span> name, audience_meter, created_at, is_good, options
+</pre>
+
+<pre><code>PhpDb\Afup\Forum Object
+(
+    ...
+            [is_good] =&gt; 1
+            [options] =&gt; Array
+                (
+                    [micro] =&gt; sm58
+                    [projecteur] =&gt; 1
+                )
+    ...
+)
+</code></pre>
+
+
+</section><section class="slide" id="missions-2">
+
+
+<h3>Missions</h3>
+
+<ul>
+<li>structure</li>
+<li><strong>souplesse</strong></li>
+<li>puissance</li>
+</ul>
+
+
+</section><section class="slide" id="mission-2">
+
+
+<h3>Souplesse</h3>
+
+<div class="block-vcenter">
+    <img src="images/Urdhva_padmasana.jpg" />
+</div>
+
+
+</section><section class="slide" id="troll-2">
+
+
+<blockquote>
+  <p>Any fool can write code that a computer can understand. Good programmers write code that humans can understand.</p>
+</blockquote>
+
+<p><em>Martin Fowler</em></p>
+
+
+</section><section class="slide" id="entity-overload-1">
+
+
+<h3>Surcharger l'entité Forum</h3>
+
+<p>Donner la moyenne des notes :</p>
+
+<pre>
+<span class="lnr"> 1 </span><span class="Special">&lt;?php</span>
+<span class="lnr"> 2 </span>
+<span class="lnr"> 3 </span>    <span class="Structure">namespace</span> PhpDb\Afup;
+<span class="lnr"> 4 </span>
+<span class="lnr"> 5 </span>    <span class="Include">use</span> \Pomm\<span class="Type">Object</span>\BaseObject;
+<span class="lnr"> 6 </span>    <span class="Include">use</span> \Pomm\<span class="Function">Exception</span>\<span class="Function">Exception</span>;
+<span class="lnr"> 7 </span>
+<span class="lnr"> 8 </span>    <span class="Structure">class</span> Forum <span class="Structure">extends</span> BaseObject
+<span class="lnr"> 9 </span>    <span class="Special">{</span>
+<span class="lnr">10 </span>      <span class="StorageClass">public</span> <span class="Define">function</span> getAvg<span class="Special">()</span>
+<span class="lnr">11 </span>      <span class="Special">{</span>
+<span class="lnr">12 </span>        <span class="Statement">return</span> <span class="Special">(</span><span class="Type">float</span><span class="Special">)</span> <span class="Special">(</span><span class="Function">array_sum</span><span class="Special">(</span><span class="Operator">$</span><span class="Identifier">this</span><span class="Structure">-&gt;</span>getAudienceMeter<span class="Special">())</span> <span class="Operator">/</span> <span class="Function">count</span><span class="Special">(</span><span class="Operator">$</span><span class="Identifier">this</span><span class="Structure">-&gt;</span>getAudienceMeter<span class="Special">()))</span>;
+<span class="lnr">13 </span>      <span class="Special">}</span>
+<span class="lnr">14 </span>    <span class="Special">}</span>
+</pre>
+
+
+</section><section class="slide" id="entity-overload-2">
+
+
+<h3>Surcharger l'entité Forum</h3>
+
+<pre>
+<span class="lnr">1 </span><span class="Special">&lt;?php</span> <span class="Comment">// ...</span>
+<span class="lnr">2 </span>
+<span class="lnr">3 </span><span class="Operator">$</span><span class="Identifier">forum</span> <span class="Operator">=</span> <span class="Operator">$</span><span class="Identifier">map</span><span class="Structure">-&gt;</span>findAll<span class="Special">()</span><span class="Structure">-&gt;</span>current<span class="Special">()</span>;
+<span class="lnr">4 </span>
+<span class="lnr">5 </span><span class="Function">printf</span><span class="Special">(</span>&quot;<span class="String">Average meter for session '%s' is %0.4f.</span><span class="Special">\n</span>&quot;, <span class="Operator">$</span><span class="Identifier">forum</span><span class="Special">[</span>'<span class="String">name</span>'<span class="Special">]</span>, <span class="Operator">$</span><span class="Identifier">forum</span><span class="Special">[</span>'<span class="String">avg</span>'<span class="Special">])</span>;
+</pre>
+
+<div class="slide" id="entity-overload-2-1">
+
+
+<pre><code>$forum-&gt;getAvg();   // 2.1747
+$forum-&gt;avg;        // 2.1747
+$forum['avg'];      // 2.1747
+$forum-&gt;get('avg'); // ERROR
+</code></pre>
+
+
+</div>
+</section><section class="slide" id="entity-extend-1">
+
+
+<h3>Étendre les entités</h3>
+
+<p>Ajouter le nombre de mesures aux résultats :</p>
+
+<pre>
+<span class="lnr"> 1 </span><span class="Special">&lt;?php</span> <span class="Comment">/// ... </span>
+<span class="lnr"> 2 </span><span class="Structure">class</span> ForumMap <span class="Structure">extends</span> BaseForumMap
+<span class="lnr"> 3 </span><span class="Special">{</span>
+<span class="lnr"> 4 </span>  <span class="StorageClass">public</span> <span class="Define">function</span> getSelectFields<span class="Special">(</span><span class="Operator">$</span><span class="Identifier">alias</span> <span class="Operator">=</span> <span class="Type">null</span><span class="Special">)</span>
+<span class="lnr"> 5 </span>  <span class="Special">{</span>
+<span class="lnr"> 6 </span>    <span class="Operator">$</span><span class="Identifier">fields</span> <span class="Operator">=</span> <span class="Structure">parent</span><span class="Operator">::</span>getSelectFields<span class="Special">(</span><span class="Operator">$</span><span class="Identifier">alias</span><span class="Special">)</span>;
+<span class="lnr"> 7 </span>    <span class="Operator">$</span><span class="Identifier">alias</span> <span class="Operator">=</span> <span class="Function">is_null</span><span class="Special">(</span><span class="Operator">$</span><span class="Identifier">alias</span><span class="Special">)</span> <span class="Operator">?</span> '' <span class="Operator">:</span> <span class="Function">sprintf</span><span class="Special">(</span>&quot;<span class="String">%s.</span>&quot;, <span class="Operator">$</span><span class="Identifier">alias</span><span class="Special">)</span>;
+<span class="lnr"> 8 </span>
+<span class="lnr"> 9 </span>    <span class="Operator">$</span><span class="Identifier">fields</span><span class="Special">[]</span> <span class="Operator">=</span> <span class="Function">sprintf</span><span class="Special">(</span>'<span class="String">array_length(%saudience_meter, 1) AS meter_count</span>', <span class="Operator">$</span><span class="Identifier">alias</span><span class="Special">)</span>;
+<span class="lnr">10 </span>
+<span class="lnr">11 </span>    <span class="Statement">return</span> <span class="Operator">$</span><span class="Identifier">fields</span>;
+<span class="lnr">12 </span>  <span class="Special">}</span>
+<span class="lnr">13 </span><span class="Special">}</span>
+</pre>
+
+
+</section><section class="slide" id="entity-extend-2">
+
+
+<h3>Étendre les entités</h3>
+
+<pre>
+<span class="lnr">1 </span><span class="Special">&lt;?php</span> <span class="Comment">//...</span>
+<span class="lnr">2 </span><span class="Operator">$</span><span class="Identifier">forum</span> <span class="Operator">=</span> <span class="Operator">$</span><span class="Identifier">map</span><span class="Structure">-&gt;</span>findAll<span class="Special">()</span><span class="Structure">-&gt;</span>current<span class="Special">()</span>;
+<span class="lnr">3 </span>
+<span class="lnr">4 </span><span class="Function">printf</span><span class="Special">(</span>&quot;<span class="String">Number of measures for session '%s' = %d.</span><span class="Special">\n</span>&quot;, <span class="Operator">$</span><span class="Identifier">forum</span><span class="Special">[</span>'<span class="String">name</span>'<span class="Special">]</span>, <span class="Operator">$</span><span class="Identifier">forum</span><span class="Special">[</span>'<span class="String">meter_count</span>'<span class="Special">])</span>;
+</pre>
+
+<pre>
+<span class="lnr">1 </span><span class="Statement">SELECT</span>
+<span class="lnr">2 </span>  name,
+<span class="lnr">3 </span>  audience_meter,
+<span class="lnr">4 </span>  created_at,
+<span class="lnr">5 </span>  is_good, options,
+<span class="lnr">6 </span>  <span class="Function">array_length</span>(audience_meter, <span class="Number">1</span>) <span class="Special">AS</span> meter_count
+<span class="lnr">7 </span><span class="Special">FROM</span>
+<span class="lnr">8 </span>  afup.forum;
+</pre>
+
+
+</section><section class="slide" id="Condition-1">
+
+
+<h3>Gérer les requêtes : findWhere()</h3>
+
+<p>Retrouver les sessions où toutes les mesures sont > 1 :</p>
+
+<pre>
+<span class="lnr">1 </span><span class="Special">&lt;?php</span> <span class="Comment">//...</span>
+<span class="lnr">2 </span><span class="Operator">$</span><span class="Identifier">forums</span> <span class="Operator">=</span> <span class="Operator">$</span><span class="Identifier">map</span><span class="Structure">-&gt;</span>findWhere<span class="Special">(</span>'<span class="String">? &lt; ALL (audience_meter)</span>', <span class="Type">array</span><span class="Special">(</span><span class="Number">1</span><span class="Special">)</span>, '<span class="String">ORDER BY meter_count DESC</span>'<span class="Special">)</span>;
+<span class="lnr">3 </span>
+<span class="lnr">4 </span><span class="Statement">foreach</span> <span class="Special">(</span><span class="Operator">$</span><span class="Identifier">forums</span> <span class="Statement">as</span> <span class="Operator">$</span><span class="Identifier">forum</span><span class="Special">)</span> <span class="Special">{</span>
+<span class="lnr">5 </span>    <span class="Function">printf</span><span class="Special">(</span>&quot;<span class="String">Session '%s' = %d.</span><span class="Special">\n</span>&quot;, <span class="Operator">$</span><span class="Identifier">forum</span><span class="Special">[</span>'<span class="String">name</span>'<span class="Special">]</span>, <span class="Operator">$</span><span class="Identifier">forum</span><span class="Special">[</span>'<span class="String">meter_count</span>'<span class="Special">])</span>;
+<span class="lnr">6 </span><span class="Special">}</span>
+</pre>
+
+<pre>
+<span class="lnr"> 1 </span><span class="Statement">SELECT</span>
+<span class="lnr"> 2 </span>  name,
+<span class="lnr"> 3 </span>  audience_meter,
+<span class="lnr"> 4 </span>  created_at,
+<span class="lnr"> 5 </span>  is_good, options,
+<span class="lnr"> 6 </span>  <span class="Function">array_length</span>(audience_meter, <span class="Number">1</span>) <span class="Special">AS</span> meter_count
+<span class="lnr"> 7 </span><span class="Special">FROM</span>
+<span class="lnr"> 8 </span>  afup.forum;
+<span class="lnr"> 9 </span><span class="Special">WHERE</span>
+<span class="lnr">10 </span>  ? &lt; <span class="Statement">ALL</span> (audience_meter)
+<span class="lnr">11 </span><span class="Special">ORDER</span> <span class="Special">BY</span> meter_count <span class="Special">DESC</span>
+</pre>
+
+
+</section><section class="slide" id="condition-2">
+
+
+<h3>Gérer les requêtes : Where</h3>
+
+<p>Je veux les infos à propos des sessions</p>
+
+<ul>
+<li>ayant besoin d'un micro OU</li>
+<li>n'ayant que des mesures > 1 OU</li>
+<li>parmis les numéro 2013 et 2014</li>
+</ul>
+
+<pre>
+<span class="lnr">1 </span><span class="Special">&lt;?php</span> <span class="Comment">//...</span>
+<span class="lnr">2 </span><span class="Operator">$</span><span class="Identifier">where</span> <span class="Operator">=</span> Pomm\Query\Where<span class="Operator">::</span>create<span class="Special">(</span>'<span class="String">? &lt; ALL (audience_meter)</span>', <span class="Type">array</span><span class="Special">(</span><span class="Number">1</span><span class="Special">))</span>
+<span class="lnr">3 </span>  <span class="Structure">-&gt;</span>orWhere<span class="Special">(</span>'<span class="String">exist(options, ?)</span>', <span class="Type">array</span><span class="Special">(</span>'<span class="String">micro</span>'<span class="Special">))</span>
+<span class="lnr">4 </span>  <span class="Structure">-&gt;</span>orWhere<span class="Special">(</span>Pomm\Query\Where<span class="Operator">::</span>createWhereIn<span class="Special">(</span>'<span class="String">name</span>', <span class="Type">array</span><span class="Special">(</span>'<span class="String">yeay 2013</span>', '<span class="String">yeay 2014</span>'<span class="Special">)))</span>
+<span class="lnr">5 </span>  ;
+<span class="lnr">6 </span>
+<span class="lnr">7 </span><span class="Operator">$</span><span class="Identifier">forums</span> <span class="Operator">=</span> <span class="Operator">$</span><span class="Identifier">map</span><span class="Structure">-&gt;</span>findWhere<span class="Special">(</span><span class="Operator">$</span><span class="Identifier">where</span><span class="Special">)</span>;
+</pre>
+
+<pre>
+<span class="lnr">1 </span><span class="Statement">SELECT</span> name, audience_meter, created_at, is_good, options, <span class="Function">array_length</span>(audience_meter, <span class="Number">1</span>) <span class="Special">AS</span> meter_count <span class="Special">FROM</span> afup.forum <span class="Special">WHERE</span> (? &lt; <span class="Statement">ALL</span> (audience_meter) <span class="Statement">OR</span> exist(options, ?) <span class="Statement">OR</span> name <span class="Statement">IN</span> (?, ?))
+</pre>
+
+
+</section><section class="slide" id="requetes-1">
+
+
+<h3>Les vraies requêtes</h3>
+
+<ul>
+<li>Respect du MVC.</li>
+<li>La class map est faîte pour ça.</li>
+<li>Toujours possible d'utiliser la classe Where.</li>
+</ul>
+
+<pre>
+<span class="lnr"> 1 </span><span class="Special">&lt;?php</span> <span class="Comment">// model/PhpDb/Afup/ForumMap.php</span>
+<span class="lnr"> 2 </span>
+<span class="lnr"> 3 </span>  <span class="StorageClass">public</span> <span class="Define">function</span> findCreatedBetween<span class="Special">(</span>\DateTime <span class="Operator">$</span><span class="Identifier">dt1</span>, \DateTime <span class="Operator">$</span><span class="Identifier">dt2</span><span class="Special">)</span>
+<span class="lnr"> 4 </span>  <span class="Special">{</span>
+<span class="lnr"> 5 </span>    <span class="Operator">$</span><span class="Identifier">sql</span> <span class="Operator">=</span> <span class="Function">sprintf</span><span class="Special">(</span> &quot;<span class="String">SELECT %s FROM %s f WHERE f.created_at BETWEEN ? AND ?</span>&quot;,
+<span class="lnr"> 6 </span>      <span class="Function">join</span><span class="Special">(</span>'<span class="String">,</span>', <span class="Operator">$</span><span class="Identifier">this</span><span class="Structure">-&gt;</span>getSelectFields<span class="Special">(</span>'<span class="String">f</span>'<span class="Special">))</span>,
+<span class="lnr"> 7 </span>      <span class="Operator">$</span><span class="Identifier">this</span><span class="Structure">-&gt;</span>getTableName<span class="Special">())</span>;
+<span class="lnr"> 8 </span>
+<span class="lnr"> 9 </span>    <span class="Statement">return</span> <span class="Operator">$</span><span class="Identifier">this</span><span class="Structure">-&gt;</span>query<span class="Special">(</span><span class="Operator">$</span><span class="Identifier">sql</span>, <span class="Type">array</span><span class="Special">(</span><span class="Operator">$</span><span class="Identifier">dt1</span><span class="Structure">-&gt;</span>format<span class="Special">(</span>'<span class="String">Y-m-d H:i:s</span>'<span class="Special">)</span>, <span class="Operator">$</span><span class="Identifier">dt2</span><span class="Structure">-&gt;</span>format<span class="Special">(</span>'<span class="String">Y-m-d H:i:s</span>'<span class="Special">)))</span>;
+<span class="lnr">10 </span>  <span class="Special">}</span>
+</pre>
+
+<pre>
+<span class="lnr">1 </span><span class="Statement">SELECT</span> f.name,f.audience_meter,f.created_at,f.is_good,f.options,<span class="Function">array_length</span>(f.audience_meter, <span class="Number">1</span>) <span class="Special">AS</span> meter_count <span class="Special">FROM</span> afup.forum f <span class="Special">WHERE</span> f.created_at <span class="Statement">BETWEEN</span> ? <span class="Statement">AND</span> ?
+</pre>
+
+
+</section><section class="slide" id="missions-3">
+
+
+<h3>Missions</h3>
+
+<ul>
+<li>structure</li>
+<li>souplesse</li>
+<li><strong>puissance</strong></li>
+</ul>
+
+
+</section><section class="slide" id="mission-3">
+
+
+<h3>Puissance</h3>
+
+<div class="block-vcenter">
+    <img src="images/Nuclear_Weapon_Miniaturization.png" />
+</div>
+
+
+</section><section class="slide" id="troll-3">
+
+
+<blockquote>
+  <p>Bad programmers worry about the code. Good programmers worry about data structures and their relationships.</p>
+</blockquote>
+
+<p><em>Linus Benedict Torvalds</em></p>
+
+
+</section><section class="slide" id="pomm-table-2">
+
+
+<h3>La table Solar System Object</h3>
+
+<p>Copier une table.</p>
+
+<pre>
+<span class="lnr">1 </span><span class="Statement">CREATE</span> <span class="Special">TABLE</span> afup.ss_object (<span class="Statement">LIKE</span> test.ss_object INCLUDING <span class="Statement">ALL</span>);
+<span class="lnr">2 </span><span class="Statement">INSERT</span> <span class="Special">INTO</span> afup.ss_object <span class="Statement">SELECT</span> * <span class="Special">FROM</span> test.ss_object;
+</pre>
+
+
+</section><section class="slide" id="pomm-table-3">
+
+
+<h3>La BDD EST la structure de référence.</h3>
+
+<pre><code>             Table "afup.ss_object"
+     Column      |       Type        | Modifiers 
+-----------------+-------------------+-----------
+ name            | character varying | not null
+ distance        | bigint            | 
+ is_satellite_of | character varying | 
+Indexes:
+    "ss_object_pkey" PRIMARY KEY, btree (name)
+Check constraints:
+    "exclusive_null" CHECK (distance IS NULL AND is_satellite_of IS NULL OR distance IS NOT NULL AND is_satellite_of IS NOT NULL)
+    "ss_object_distance_check" CHECK (distance &gt;= 0)
+</code></pre>
+
+
+</section><section class="slide" id="pomm-table-4">
+
+
+<h3>La table ss_object</h3>
+
+<pre>
+<span class="lnr">1 </span><span class="Special">TABLE</span> afup.ss_object;
+</pre>
+
+<pre><code>   name   |  distance  | is_satellite_of 
+----------+------------+-----------------
+ soleil   |            | 
+ mercure  |   57909176 | soleil
+ venus    |  108208930 | soleil
+ terre    |  149597887 | soleil
+ lune     |     384399 | terre
+ ...
+ larissa  |      73548 | neptune
+(30 rows)
+</code></pre>
+
+
+</section><section class="slide" id="custom-query-1">
+
+
+<h3>Créer ses propres requêtes</h3>
+
+<p>Afficher les satellites du soleil par ordre alphabétique.</p>
+
+<pre>
+<span class="lnr"> 1 </span><span class="Special">&lt;?php</span> <span class="Comment">// model/PhpDb/Afup/SsObjectMap.php</span>
+<span class="lnr"> 2 </span>
+<span class="lnr"> 3 </span>  <span class="Define">function</span> findSatelliteByName<span class="Special">(</span><span class="Operator">$</span><span class="Identifier">name</span><span class="Special">)</span>
+<span class="lnr"> 4 </span>  <span class="Special">{</span>
+<span class="lnr"> 5 </span>    <span class="Operator">$</span><span class="Identifier">sql</span> <span class="Operator">=</span> <span class="Function">sprintf</span><span class="Special">(</span>&quot;<span class="String">SELECT %s FROM %s WHERE is_satellite_of = ? ORDER BY name ASC</span>&quot;,
+<span class="lnr"> 6 </span>      <span class="Function">join</span><span class="Special">(</span>'<span class="String">, </span>', <span class="Operator">$</span><span class="Identifier">this</span><span class="Structure">-&gt;</span>getSelectFields<span class="Special">(</span>'<span class="String">sso</span>'<span class="Special">))</span>,
+<span class="lnr"> 7 </span>      <span class="Operator">$</span><span class="Identifier">this</span><span class="Structure">-&gt;</span>getTableName<span class="Special">(</span>'<span class="String">sso</span>'<span class="Special">)</span>
+<span class="lnr"> 8 </span>    <span class="Special">)</span>;
+<span class="lnr"> 9 </span>
+<span class="lnr">10 </span>    <span class="Statement">return</span> <span class="Operator">$</span><span class="Identifier">this</span><span class="Structure">-&gt;</span>query<span class="Special">(</span><span class="Operator">$</span><span class="Identifier">sql</span>, <span class="Type">array</span><span class="Special">(</span><span class="Operator">$</span><span class="Identifier">name</span><span class="Special">))</span>;
+<span class="lnr">11 </span>  <span class="Special">}</span>
+</pre>
+
+
+</section><section class="slide" id="custom-query-2">
+
+
+<h3>Créer ses propres requêtes</h3>
+
+<pre>
+<span class="lnr"> 1 </span><span class="Special">&lt;?php</span> <span class="Operator">...</span>
+<span class="lnr"> 2 </span>    <span class="Operator">$</span><span class="Identifier">map</span> <span class="Operator">=</span> <span class="Operator">$</span><span class="Identifier">database</span>
+<span class="lnr"> 3 </span>      <span class="Structure">-&gt;</span>createConnection<span class="Special">()</span>
+<span class="lnr"> 4 </span>      <span class="Structure">-&gt;</span>getMapFor<span class="Special">(</span>'<span class="String">PhpDb\Afup\Forum</span>'<span class="Special">)</span>
+<span class="lnr"> 5 </span>      ;
+<span class="lnr"> 6 </span>
+<span class="lnr"> 7 </span>    <span class="Statement">foreach</span> <span class="Special">(</span><span class="Operator">$</span><span class="Identifier">map</span><span class="Structure">-&gt;</span>findSatelliteByName<span class="Special">(</span>'<span class="String">soleil</span>'<span class="Special">)</span> <span class="Statement">as</span> <span class="Operator">$</span><span class="Identifier">planet</span><span class="Special">)</span> <span class="Special">{</span>
+<span class="lnr"> 8 </span>        <span class="Function">printf</span><span class="Special">(</span>&quot;<span class="String">%s (%s km).</span><span class="Special">\n</span>&quot;,
+<span class="lnr"> 9 </span>            <span class="Operator">$</span><span class="Identifier">planet</span><span class="Special">[</span>'<span class="String">name</span>'<span class="Special">]</span>,
+<span class="lnr">10 </span>            <span class="Function">number_format</span><span class="Special">(</span><span class="Operator">$</span><span class="Identifier">planet</span><span class="Special">[</span>'<span class="String">distance</span>'<span class="Special">]</span>, <span class="Number">0</span>, '<span class="String">,</span>', '<span class="String"> </span>'<span class="Special">)</span>
+<span class="lnr">11 </span>            <span class="Special">)</span>;
+<span class="lnr">12 </span>    <span class="Special">}</span>
+</pre>
+
+
+</section><section class="slide" id="custom-query-3">
+
+
+<h3>Créer ses propres requêtes</h3>
+
+<pre><code>jupiter (778 412 027 km).
+mars (227 936 637 km).
+mercure (57 909 176 km).
+neptune (4 503 443 661 km).
+saturne (1 421 179 772 km).
+terre (149 597 887 km).
+uranus (2 876 679 082 km).
+venus (108 208 930 km).
+</code></pre>
+
+<div class="slide" id="custom-query-2-1">
+
+
+<p>Et leur position par rapport au soleil ?</p>
+
+
+</div>
+</section><section class="slide" id="window-1">
+
+
+<h3>Fonctions Window</h3>
+
+<ul>
+<li>donne des informations relatives sur les résultats.</li>
+<li>permet de partitionner les résultats sur un critère.</li>
+<li>rang, ordre, suivant, précédent etc...</li>
+</ul>
+
+
+</section><section class="slide" id="window-2">
+
+
+<h3>Fonctions Window</h3>
+
+<pre>
+<span class="lnr"> 1 </span><span class="Special">&lt;?php</span> <span class="Comment">// model/PhpDb/Afup/SsObjectMap.php</span>
+<span class="lnr"> 2 </span>    <span class="Operator">$</span><span class="Identifier">sql</span> <span class="Operator">=</span> <span class="Operator">&lt;&lt;&lt;</span><span class="Special">SQL</span>
+<span class="lnr"> 3 </span><span class="Statement">SELECT</span>
+<span class="lnr"> 4 </span>    %s,
+<span class="lnr"> 5 </span>    rank() OVER (PARTITION <span class="Special">BY</span> is_satellite_of <span class="Special">ORDER</span> <span class="Special">BY</span> distance <span class="Special">ASC</span>) <span class="Special">AS</span> position
+<span class="lnr"> 6 </span><span class="Special">FROM</span>
+<span class="lnr"> 7 </span>   %s
+<span class="lnr"> 8 </span><span class="Special">WHERE</span>
+<span class="lnr"> 9 </span>    is_satellite_of = ?
+<span class="lnr">10 </span><span class="Special">ORDER</span> <span class="Special">BY</span> name <span class="Special">ASC</span>
+<span class="lnr">11 </span><span class="Special">SQL</span>;
+<span class="lnr">12 </span>    <span class="Operator">$</span><span class="Identifier">sql</span> <span class="Operator">=</span> <span class="Function">sprintf</span><span class="Special">(</span><span class="Operator">$</span><span class="Identifier">sql</span>,
+<span class="lnr">13 </span>      <span class="Function">join</span><span class="Special">(</span>'<span class="String">, </span>', <span class="Operator">$</span><span class="Identifier">this</span><span class="Structure">-&gt;</span>getSelectFields<span class="Special">(</span>'<span class="String">sso</span>'<span class="Special">))</span>,
+<span class="lnr">14 </span>      <span class="Operator">$</span><span class="Identifier">this</span><span class="Structure">-&gt;</span>getTableName<span class="Special">(</span>'<span class="String">sso</span>'<span class="Special">)</span>
+<span class="lnr">15 </span>    <span class="Special">)</span>;
+<span class="lnr">16 </span>
+<span class="lnr">17 </span>    <span class="Statement">return</span> <span class="Operator">$</span><span class="Identifier">this</span><span class="Structure">-&gt;</span>query<span class="Special">(</span><span class="Operator">$</span><span class="Identifier">sql</span>, <span class="Type">array</span><span class="Special">(</span><span class="Operator">$</span><span class="Identifier">name</span><span class="Special">))</span>;
+</pre>
+
+
+</section><section class="slide" id="window-3">
+
+
+<h3>Fonctions Window</h3>
+
+<pre>
+<span class="lnr"> 1 </span><span class="Special">&lt;?php</span> <span class="Operator">...</span>
+<span class="lnr"> 2 </span>    <span class="Operator">$</span><span class="Identifier">map</span> <span class="Operator">=</span> <span class="Operator">$</span><span class="Identifier">database</span>
+<span class="lnr"> 3 </span>      <span class="Structure">-&gt;</span>createConnection<span class="Special">()</span>
+<span class="lnr"> 4 </span>      <span class="Structure">-&gt;</span>getMapFor<span class="Special">(</span>'<span class="String">PhpDb\Afup\Forum</span>'<span class="Special">)</span>
+<span class="lnr"> 5 </span>      ;
+<span class="lnr"> 6 </span>
+<span class="lnr"> 7 </span>    <span class="Statement">foreach</span> <span class="Special">(</span><span class="Operator">$</span><span class="Identifier">map</span><span class="Structure">-&gt;</span>findSatelliteByName<span class="Special">(</span>'<span class="String">soleil</span>'<span class="Special">)</span> <span class="Statement">as</span> <span class="Operator">$</span><span class="Identifier">planet</span><span class="Special">)</span> <span class="Special">{</span>
+<span class="lnr"> 8 </span>        <span class="Function">printf</span><span class="Special">(</span>&quot;<span class="String">[%d] - %s (%s km).</span><span class="Special">\n</span>&quot;,
+<span class="lnr"> 9 </span>            <span class="Operator">$</span><span class="Identifier">planet</span><span class="Special">[</span>'<span class="String">position</span>'<span class="Special">]</span>,
+<span class="lnr">10 </span>            <span class="Operator">$</span><span class="Identifier">planet</span><span class="Special">[</span>'<span class="String">name</span>'<span class="Special">]</span>,
+<span class="lnr">11 </span>            <span class="Function">number_format</span><span class="Special">(</span><span class="Operator">$</span><span class="Identifier">planet</span><span class="Special">[</span>'<span class="String">distance</span>'<span class="Special">]</span>, <span class="Number">0</span>, '<span class="String">,</span>', '<span class="String"> </span>'<span class="Special">)</span>
+<span class="lnr">12 </span>            <span class="Special">)</span>;
+<span class="lnr">13 </span>    <span class="Special">}</span>
+</pre>
+
+
+</section><section class="slide" id="window-4">
+
+
+<h3>Fonctions Window</h3>
+
+<pre><code>[5] - jupiter (778 412 027 km).
+[4] - mars (227 936 637 km).
+[1] - mercure (57 909 176 km).
+[8] - neptune (4 503 443 661 km).
+[6] - saturne (1 421 179 772 km).
+[3] - terre (149 597 887 km).
+[7] - uranus (2 876 679 082 km).
+[2] - venus (108 208 930 km).
+</code></pre>
+
+
+</section><section class="slide" id="window-5">
+
+
+<h3>Fonctions window : lead et lag</h3>
+
+<p>Trouver le précédent et le suivant.</p>
+
+<pre>
+<span class="lnr"> 1 </span><span class="Statement">SELECT</span>
+<span class="lnr"> 2 </span>    %s,
+<span class="lnr"> 3 </span>    <span class="Function">rank</span>() <span class="Special">OVER</span> satellite_order <span class="Special">AS</span> <span class="Function">position</span>,
+<span class="lnr"> 4 </span>    <span class="Function">lead</span>(name) <span class="Special">OVER</span> satellite_order <span class="Special">AS</span> preceding,
+<span class="lnr"> 5 </span>    <span class="Function">lag</span>(name) <span class="Special">OVER</span> satellite_order <span class="Special">AS</span> following
+<span class="lnr"> 6 </span><span class="Special">FROM</span>
+<span class="lnr"> 7 </span>   %s
+<span class="lnr"> 8 </span><span class="Special">WHERE</span>
+<span class="lnr"> 9 </span>    is_satellite_of = ?
+<span class="lnr">10 </span><span class="Special">WINDOW</span>
+<span class="lnr">11 </span>  satellite_order <span class="Special">AS</span> (<span class="Special">PARTITION</span> <span class="Special">BY</span> is_satellite_of <span class="Special">ORDER</span> <span class="Special">BY</span> distance <span class="Special">ASC</span>)
+<span class="lnr">12 </span><span class="Special">ORDER</span> <span class="Special">BY</span> name <span class="Special">ASC</span>
+</pre>
+
+
+</section><section class="slide" id="window-6">
+
+
+<h3>Fonctions window : lead et lag</h3>
+
+<pre>
+<span class="lnr"> 1 </span><span class="Special">&lt;?php</span> <span class="Comment">//...</span>
+<span class="lnr"> 2 </span><span class="Operator">$</span><span class="Identifier">planets</span> <span class="Operator">=</span> <span class="Operator">$</span><span class="Identifier">map</span><span class="Structure">-&gt;</span>findSatelliteWithCount<span class="Special">(</span>'<span class="String">saturne</span>'<span class="Special">)</span>;
+<span class="lnr"> 3 </span>
+<span class="lnr"> 4 </span><span class="Statement">foreach</span> <span class="Special">(</span><span class="Operator">$</span><span class="Identifier">planets</span> <span class="Statement">as</span> <span class="Operator">$</span><span class="Identifier">planet</span><span class="Special">)</span> <span class="Special">{</span>
+<span class="lnr"> 5 </span>  <span class="Function">printf</span><span class="Special">(</span>&quot;<span class="String">[%s] %d - %s (%s km) [%s]</span><span class="Special">\n</span>&quot;,
+<span class="lnr"> 6 </span>    <span class="Operator">$</span><span class="Identifier">planet</span><span class="Special">[</span>'<span class="String">following</span>'<span class="Special">]</span>,
+<span class="lnr"> 7 </span>    <span class="Operator">$</span><span class="Identifier">planet</span><span class="Special">[</span>'<span class="String">position</span>'<span class="Special">]</span>,
+<span class="lnr"> 8 </span>    <span class="Operator">$</span><span class="Identifier">planet</span><span class="Special">[</span>'<span class="String">name</span>'<span class="Special">]</span>,
+<span class="lnr"> 9 </span>    <span class="Function">number_format</span><span class="Special">(</span><span class="Operator">$</span><span class="Identifier">planet</span><span class="Special">[</span>'<span class="String">distance</span>'<span class="Special">]</span>, <span class="Number">0</span>, '<span class="String">.</span>', '<span class="String"> </span>'<span class="Special">)</span>,
+<span class="lnr">10 </span>    <span class="Operator">$</span><span class="Identifier">planet</span><span class="Special">[</span>'<span class="String">preceding</span>'<span class="Special">]</span>
+<span class="lnr">11 </span>  <span class="Special">)</span>;
+</pre>
+
+
+</section><section class="slide" id="window-7">
+
+
+<h3>Fonctions window : lead et lag</h3>
+
+<pre><code>[thétys] 4 - dioné (377 400 km) [titan]
+[mimas] 2 - encelade (238 020 km) [thétys]
+[titan] 6 - japet (3 560 840 km) []
+[] 1 - mimas (185 600 km) [encelade]
+[encelade] 3 - thétys (294 992 km) [dioné]
+[dioné] 5 - titan (1 221 870 km) [japet]
+</code></pre>
+
+
+</section><section class="slide" id="aggregates-1">
+
+
+<h3>Aggrégats</h3>
+
+<p>Donner la liste des satellites du soleil et le nombre de leurs propres satellites.</p>
+
+
+</section><section class="slide" id="aggregates-2">
+
+
+<h3>Aggrégats</h3>
+
+<pre>
+<span class="lnr"> 1 </span><span class="Statement">SELECT</span>
+<span class="lnr"> 2 </span>  %s,
+<span class="lnr"> 3 </span>  <span class="Function">count</span>(satellite.*) <span class="Special">AS</span> satellite_count
+<span class="lnr"> 4 </span><span class="Special">FROM</span>
+<span class="lnr"> 5 </span>  %s planet
+<span class="lnr"> 6 </span>    <span class="Function">LEFT</span> <span class="Special">JOIN</span> %s satellite <span class="Special">ON</span> satellite.is_satellite_of = planet.name
+<span class="lnr"> 7 </span><span class="Special">WHERE</span>
+<span class="lnr"> 8 </span>    planet.is_satellite_of = ?
+<span class="lnr"> 9 </span><span class="Special">GROUP</span> <span class="Special">BY</span>
+<span class="lnr">10 </span>  planet.name
+<span class="lnr">11 </span><span class="Special">ORDER</span> <span class="Special">BY</span>
+<span class="lnr">12 </span>    distance <span class="Special">ASC</span>
+</pre>
+
+
+</section><section class="slide" id="aggregates-3">
+
+
+<h3>Aggrégats</h3>
+
+<pre><code>mercure (57 909 176 km) [0]
+venus (108 208 930 km) [0]
+terre (149 597 887 km) [1]
+mars (227 936 637 km) [2]
+jupiter (778 412 027 km) [4]
+saturne (1 421 179 772 km) [6]
+uranus (2 876 679 082 km) [5]
+neptune (4 503 443 661 km) [3]
+</code></pre>
+
+
+</section><section class="slide" id="aggregates-4">
+
+
+<h3>Aggrégats</h3>
+
+<p>Comment avoir la liste de leurs satellites ?</p>
+
+
+</section><section class="slide" id="aggregates-5">
+
+
+<h3>Aggrégats</h3>
+
+<pre>
+<span class="lnr"> 1 </span><span class="Statement">SELECT</span>
+<span class="lnr"> 2 </span>  %s,
+<span class="lnr"> 3 </span>  <span class="Function">count</span>(satellite.*) <span class="Special">AS</span> satellite_count,
+<span class="lnr"> 4 </span>  <span class="Function">array_agg</span>(satellite.name) <span class="Special">AS</span> satellites
+<span class="lnr"> 5 </span><span class="Special">FROM</span>
+<span class="lnr"> 6 </span>  %s planet
+<span class="lnr"> 7 </span>    <span class="Function">LEFT</span> <span class="Special">JOIN</span> %s satellite <span class="Special">ON</span> satellite.is_satellite_of = planet.name
+<span class="lnr"> 8 </span><span class="Special">WHERE</span>
+<span class="lnr"> 9 </span>    planet.is_satellite_of = ?
+<span class="lnr">10 </span><span class="Special">GROUP</span> <span class="Special">BY</span>
+<span class="lnr">11 </span>  planet.name
+<span class="lnr">12 </span><span class="Special">ORDER</span> <span class="Special">BY</span>
+<span class="lnr">13 </span>    distance <span class="Special">ASC</span>
+</pre>
+
+
+</section><section class="slide" id="aggregates-6">
+
+
+<h3>Aggrégats</h3>
+
+<pre><code>mercure (57 909 176 km) [0] ({NULL})
+venus (108 208 930 km) [0] ({NULL})
+terre (149 597 887 km) [1] ({moon})
+mars (227 936 637 km) [2] ({phobos,deimos})
+jupiter (778 412 027 km) [4] ({io,ganymède,callisto,europe})
+saturne (1 421 179 772 km) [6] ({titan,thétys,dioné,japet,mimas,encelade})
+uranus (2 876 679 082 km) [5] ({miranda,ariel,umbriel,titania,obéron})
+neptune (4 503 443 661 km) [3] ({triton,néréide,larissa})
+</code></pre>
+
+
+</section><section class="slide" id="virtual-field-1">
+
+
+<h3>Champs virtuels</h3>
+
+<ul>
+<li>Le champ supplémentaire est retourné par Pg comme un tableau.</li>
+<li>Il est traité par PHP comme une chaîne de caractères.</li>
+<li>Il faut utiliser le système de conversion.</li>
+<li>Ajouter une colonne virtuelle : <em>addVirtualField()</em></li>
+</ul>
+
+
+</section><section class="slide" id="virtual-field-2">
+
+
+<h3>Champs virtuels</h3>
+
+<pre>
+<span class="lnr"> 1 </span><span class="Special">&lt;?php</span> <span class="Comment">// model/PhpDb/Afup/SsObjectMap.php</span>
+<span class="lnr"> 2 </span>  <span class="StorageClass">public</span> <span class="Define">function</span> findSatelliteWithCount<span class="Special">(</span><span class="Operator">$</span><span class="Identifier">name</span><span class="Special">)</span>
+<span class="lnr"> 3 </span>  <span class="Special">{</span>
+<span class="lnr"> 4 </span>    <span class="Operator">$</span><span class="Identifier">sql</span>  <span class="Operator">=</span> <span class="Operator">&lt;&lt;&lt;</span><span class="Special">SQL</span>
+<span class="lnr"> 5 </span><span class="Statement">SELECT</span>
+<span class="lnr"> 6 </span>  %s,
+<span class="lnr"> 7 </span>  count(satellite.*) <span class="Special">AS</span> satellite_count,
+<span class="lnr"> 8 </span>  array_agg(satellite.name) <span class="Special">AS</span> satellites
+<span class="lnr"> 9 </span>...
+<span class="lnr">10 </span><span class="Special">SQL</span>;
+<span class="lnr">11 </span>
+<span class="lnr">12 </span>    <span class="Operator">$</span><span class="Identifier">sql</span> <span class="Operator">=</span> <span class="Function">sprintf</span><span class="Special">(</span><span class="Operator">$</span><span class="Identifier">sql</span>,
+<span class="lnr">13 </span>      <span class="Function">join</span><span class="Special">(</span>'<span class="String">, </span>', <span class="Operator">$</span><span class="Identifier">this</span><span class="Structure">-&gt;</span>getSelectFields<span class="Special">(</span>'<span class="String">planet</span>'<span class="Special">))</span>,
+<span class="lnr">14 </span>      <span class="Operator">$</span><span class="Identifier">this</span><span class="Structure">-&gt;</span>getTableName<span class="Special">()</span>,
+<span class="lnr">15 </span>      <span class="Operator">$</span><span class="Identifier">this</span><span class="Structure">-&gt;</span>getTableName<span class="Special">()</span>
+<span class="lnr">16 </span>    <span class="Special">)</span>;
+<span class="lnr">17 </span>
+<span class="lnr">18 </span>    <span class="Operator">$</span><span class="Identifier">this</span><span class="Structure">-&gt;</span>addVirtualField<span class="Special">(</span>'<span class="String">satellites</span>', '<span class="String">varchar[]</span>'<span class="Special">)</span>;
+<span class="lnr">19 </span>
+<span class="lnr">20 </span>    <span class="Statement">return</span> <span class="Operator">$</span><span class="Identifier">this</span><span class="Structure">-&gt;</span>query<span class="Special">(</span><span class="Operator">$</span><span class="Identifier">sql</span>, <span class="Type">array</span><span class="Special">(</span><span class="Operator">$</span><span class="Identifier">name</span><span class="Special">))</span>;
+<span class="lnr">21 </span>  <span class="Special">}</span>
+</pre>
+
+
+</section><section class="slide" id="virtual-fields-3">
+
+
+<h3>Champs virtuels</h3>
+
+<pre>
+<span class="lnr"> 1 </span><span class="Special">&lt;?php</span> <span class="Comment">// ...</span>
+<span class="lnr"> 2 </span><span class="Operator">$</span><span class="Identifier">planets</span> <span class="Operator">=</span> <span class="Operator">$</span><span class="Identifier">map</span><span class="Structure">-&gt;</span>findSatelliteWithCount<span class="Special">(</span>'<span class="String">soleil</span>'<span class="Special">)</span>;
+<span class="lnr"> 3 </span>
+<span class="lnr"> 4 </span><span class="Statement">foreach</span> <span class="Special">(</span><span class="Operator">$</span><span class="Identifier">planets</span> <span class="Statement">as</span> <span class="Operator">$</span><span class="Identifier">planet</span><span class="Special">)</span> <span class="Special">{</span>
+<span class="lnr"> 5 </span>  <span class="Function">printf</span><span class="Special">(</span>&quot;<span class="String">%s (%s km) [%d] (%s)</span><span class="Special">\n</span>&quot;,
+<span class="lnr"> 6 </span>    <span class="Operator">$</span><span class="Identifier">planet</span><span class="Special">[</span>'<span class="String">name</span>'<span class="Special">]</span>,
+<span class="lnr"> 7 </span>    <span class="Function">number_format</span><span class="Special">(</span><span class="Operator">$</span><span class="Identifier">planet</span><span class="Special">[</span>'<span class="String">distance</span>'<span class="Special">]</span>, <span class="Number">0</span>, '<span class="String">.</span>', '<span class="String"> </span>'<span class="Special">)</span>,
+<span class="lnr"> 8 </span>    <span class="Operator">$</span><span class="Identifier">planet</span><span class="Special">[</span>'<span class="String">satellite_count</span>'<span class="Special">]</span>,
+<span class="lnr"> 9 </span>    <span class="Function">join</span><span class="Special">(</span>'<span class="String"> - </span>', <span class="Operator">$</span><span class="Identifier">planet</span><span class="Special">[</span>'<span class="String">satellites</span>'<span class="Special">])</span>
+<span class="lnr">10 </span>  <span class="Special">)</span>;
+<span class="lnr">11 </span><span class="Special">}</span>
+</pre>
+
+
+</section><section class="slide" id="virtual-fields-4">
+
+
+<h3>Champs virtuels</h3>
+
+<pre><code>mercure (57 909 176 km) [0] ()
+venus (108 208 930 km) [0] ()
+terre (149 597 887 km) [1] (moon)
+mars (227 936 637 km) [2] (phobos - deimos)
+jupiter (778 412 027 km) [4] (io - ganymède - callisto - europe)
+saturne (1 421 179 772 km) [6] (titan - thétys - dioné - japet - mimas - encelade)
+uranus (2 876 679 082 km) [5] (miranda - ariel - umbriel - titania - obéron)
+neptune (4 503 443 661 km) [3] (triton - néréide - larissa)
+</code></pre>
+
+
+</section><section class="slide" id="entity-converter-1">
+
+
+<h3>Relations objet</h3>
+
+<p>Comment avoir une liste d'objets satellites plutôt qu'une liste de noms ?</p>
+
+<div class="slide" id="entity-converter-1-1">
+
+
+<ul>
+<li>Pour chaque table ou vue, Pg crée le type correspondant.</li>
+<li>Ce type composite est utilisable dans des requêtes.</li>
+<li>Ce type est utilisable dans d'autres tables !</li>
+</ul>
+
+
+</div>
+</section><section class="slide" id="entity-converter-2">
+
+
+<h3>Relations objet</h3>
+
+<p>Dans postgres, on peut récupérer les résultats comme des objets :</p>
+
+<pre>
+<span class="lnr">1 </span><span class="Statement">SELECT</span> ss_object <span class="Special">FROM</span> ss_object;
+<span class="lnr">2 </span>          ss_object
+<span class="lnr">3 </span><span class="Comment">-----------------------------</span>
+<span class="lnr">4 </span> (soleil,,)
+<span class="lnr">5 </span> (mercure,<span class="Number">57909176</span>,soleil)
+<span class="lnr">6 </span> (venus,<span class="Number">108208930</span>,soleil)
+<span class="lnr">7 </span> (terre,<span class="Number">149597887</span>,soleil)
+<span class="lnr">8 </span> ...
+</pre>
+
+<p>Utilisons cette propriété pour ramener directement les données des satellites.</p>
+
+
+</section><section class="slide" id="entity-converter-3">
+
+
+<h3>Relations objet</h3>
+
+<pre>
+<span class="lnr">1 </span><span class="Statement">SELECT</span>
+<span class="lnr">2 </span>  %s,
+<span class="lnr">3 </span>  <span class="Function">count</span>(satellite) <span class="Special">AS</span> satellite_count,
+<span class="lnr">4 </span>  <span class="Function">array_agg</span>(satellite) <span class="Special">AS</span> satellites
+<span class="lnr">5 </span><span class="Special">FROM</span>
+<span class="lnr">6 </span>  %s planet
+<span class="lnr">7 </span>    <span class="Function">LEFT</span> <span class="Special">JOIN</span> %s satellite <span class="Special">ON</span> satellite.is_satellite_of = planet.name
+<span class="lnr">8 </span><span class="Special">WHERE</span>
+<span class="lnr">9 </span>...
+</pre>
+
+<pre>
+<span class="lnr">1 </span><span class="Special">&lt;?php</span> <span class="Comment">// ...</span>
+<span class="lnr">2 </span><span class="Operator">$</span><span class="Identifier">this</span><span class="Structure">-&gt;</span>addVirtualField<span class="Special">(</span>'<span class="String">satellites</span>', '<span class="String">afup.ss_object[]</span>'<span class="Special">)</span>;
+</pre>
+
+
+</section><section class="slide" id="entity-converter-4">
+
+
+<h3>Relations objet</h3>
+
+<p>Un nouveau convertisseur :</p>
+
+<pre>
+<span class="lnr"> 1 </span><span class="Special">&lt;?php</span> <span class="Comment">//...</span>
+<span class="lnr"> 2 </span><span class="Operator">$</span><span class="Identifier">map</span> <span class="Operator">=</span> <span class="Operator">$</span><span class="Identifier">database</span>
+<span class="lnr"> 3 </span>  <span class="Structure">-&gt;</span>registerConverter<span class="Special">(</span>
+<span class="lnr"> 4 </span>    '<span class="String">SsObject</span>',
+<span class="lnr"> 5 </span>    <span class="Define">new</span> Pomm\Converter\PgEntity<span class="Special">(</span><span class="Operator">$</span><span class="Identifier">database</span>, '<span class="String">PhpDb\Afup\SsObject</span>'<span class="Special">)</span>,
+<span class="lnr"> 6 </span>    <span class="Type">array</span><span class="Special">(</span>'<span class="String">afup.ss_object</span>'<span class="Special">))</span>
+<span class="lnr"> 7 </span>  <span class="Structure">-&gt;</span>createConnection<span class="Special">()</span>
+<span class="lnr"> 8 </span>  <span class="Structure">-&gt;</span>getMapFor<span class="Special">(</span>'<span class="String">PhpDb\Afup\SsObject</span>'<span class="Special">)</span>
+<span class="lnr"> 9 </span>  ;
+<span class="lnr">10 </span>
+<span class="lnr">11 </span><span class="Operator">$</span><span class="Identifier">planets</span> <span class="Operator">=</span> <span class="Operator">$</span><span class="Identifier">map</span><span class="Structure">-&gt;</span>findSatelliteWithCount<span class="Special">(</span>'<span class="String">soleil</span>'<span class="Special">)</span>;
+<span class="lnr">12 </span>
+<span class="lnr">13 </span><span class="Statement">foreach</span> <span class="Special">(</span><span class="Operator">$</span><span class="Identifier">planets</span> <span class="Statement">as</span> <span class="Operator">$</span><span class="Identifier">planet</span><span class="Special">)</span> <span class="Special">{</span>
+<span class="lnr">14 </span>  <span class="Statement">if</span> <span class="Special">(</span><span class="Operator">$</span><span class="Identifier">planet</span><span class="Special">[</span>'<span class="String">name</span>'<span class="Special">]</span> <span class="Statement">===</span> '<span class="String">terre</span>'<span class="Special">)</span> <span class="Special">{</span>
+<span class="lnr">15 </span>    <span class="Function">print_r</span><span class="Special">(</span><span class="Operator">$</span><span class="Identifier">planet</span><span class="Special">[</span>'<span class="String">satellites</span>'<span class="Special">])</span>;
+<span class="lnr">16 </span>  <span class="Special">}</span>
+<span class="lnr">17 </span><span class="Special">}</span>
+</pre>
+
+
+</section><section class="slide" id="entity-converter-5">
+
+
+<h3>Relations objet</h3>
+
+<pre><code>Array
+(
+    [0] =&gt; PhpDb\Afup\SsObject Object
+        (
+            [fields:protected] =&gt; Array
+                (
+                    [name] =&gt; moon
+                    [distance] =&gt; 384399
+                    [is_satellite_of] =&gt; terre
+                )
+            [status:protected] =&gt; 1
+        )
+)
+</code></pre>
+
+
+</section><section class="slide" id="cte-1">
+
+
+<h3>Common Table Expressions (CTEs)</h3>
+
+<p>Les CTE permettent de créer des subselect de façon claire et facile à déboguer.</p>
+
+<div class="slide" id="cte-1-1">
+
+
+<p>Comment préciser leur position aux objets satellite ?</p>
+
+
+</div>
+</section><section class="slide" id="cte-2">
+
+
+<h3>Common Table Expressions (CTEs)</h3>
+
+<pre>
+<span class="lnr"> 1 </span><span class="Special">WITH</span>
+<span class="lnr"> 2 </span>  satellite <span class="Special">AS</span> (
+<span class="lnr"> 3 </span>    <span class="Statement">SELECT</span> %s, <span class="Function">rank</span>() <span class="Special">OVER</span> (<span class="Special">PARTITION</span> <span class="Special">BY</span> is_satellite_of <span class="Special">ORDER</span> <span class="Special">BY</span> distance <span class="Special">ASC</span>) <span class="Special">AS</span> <span class="Function">position</span> <span class="Special">FROM</span> %s <span class="Special">ORDER</span> <span class="Special">BY</span> distance <span class="Special">ASC</span>
+<span class="lnr"> 4 </span>)
+<span class="lnr"> 5 </span><span class="Statement">SELECT</span>
+<span class="lnr"> 6 </span>  %s,
+<span class="lnr"> 7 </span>  <span class="Function">count</span>(satellite) <span class="Special">AS</span> satellite_count,
+<span class="lnr"> 8 </span>  <span class="Function">array_agg</span>(satellite) <span class="Special">AS</span> satellites
+<span class="lnr"> 9 </span><span class="Special">FROM</span>
+<span class="lnr">10 </span>  %s planet
+<span class="lnr">11 </span>    <span class="Function">LEFT</span> <span class="Special">JOIN</span> satellite <span class="Special">ON</span> satellite.is_satellite_of = planet.name
+<span class="lnr">12 </span><span class="Special">WHERE</span>
+<span class="lnr">13 </span>    planet.is_satellite_of = ?
+<span class="lnr">14 </span>...
+</pre>
+
+
+</section><section class="slide" id="cte-3">
+
+
+<h3>Common Table Expressions (CTEs)</h3>
+
+<pre>
+<span class="lnr"> 1 </span><span class="Special">&lt;?php</span> <span class="Comment">//...</span>
+<span class="lnr"> 2 </span><span class="Operator">$</span><span class="Identifier">planets</span> <span class="Operator">=</span> <span class="Operator">$</span><span class="Identifier">map</span><span class="Structure">-&gt;</span>findSatelliteWithCount<span class="Special">(</span>'<span class="String">soleil</span>'<span class="Special">)</span>;
+<span class="lnr"> 3 </span>
+<span class="lnr"> 4 </span><span class="Statement">foreach</span> <span class="Special">(</span><span class="Operator">$</span><span class="Identifier">planets</span> <span class="Statement">as</span> <span class="Operator">$</span><span class="Identifier">planet</span><span class="Special">)</span> <span class="Special">{</span>
+<span class="lnr"> 5 </span>    <span class="Function">printf</span><span class="Special">(</span>&quot;<span class="String">planet '%s' (satellites %d)</span><span class="Special">\n</span>&quot;,
+<span class="lnr"> 6 </span>        <span class="Operator">$</span><span class="Identifier">planet</span><span class="Special">[</span>'<span class="String">name</span>'<span class="Special">]</span>,
+<span class="lnr"> 7 </span>        <span class="Operator">$</span><span class="Identifier">planet</span><span class="Special">[</span>'<span class="String">satellite_count</span>'<span class="Special">])</span>;
+<span class="lnr"> 8 </span>    <span class="Statement">foreach</span> <span class="Special">(</span><span class="Operator">$</span><span class="Identifier">planet</span><span class="Special">[</span>'<span class="String">satellites</span>'<span class="Special">]</span> <span class="Statement">as</span> <span class="Operator">$</span><span class="Identifier">satellite</span><span class="Special">)</span> <span class="Special">{</span>
+<span class="lnr"> 9 </span>        <span class="Function">printf</span><span class="Special">(</span>&quot;<span class="String">    [%d] - %s (%s km)</span><span class="Special">\n</span>&quot;,
+<span class="lnr">10 </span>            <span class="Operator">$</span><span class="Identifier">satellite</span><span class="Special">[</span>'<span class="String">_extra</span>'<span class="Special">][</span><span class="Number">0</span><span class="Special">]</span>,
+<span class="lnr">11 </span>            <span class="Operator">$</span><span class="Identifier">satellite</span><span class="Special">[</span>'<span class="String">name</span>'<span class="Special">]</span>,
+<span class="lnr">12 </span>            <span class="Function">number_format</span><span class="Special">(</span><span class="Operator">$</span><span class="Identifier">satellite</span><span class="Special">[</span>'<span class="String">distance</span>'<span class="Special">]</span>, <span class="Number">0</span>, '<span class="String">,</span>', '<span class="String"> </span>'<span class="Special">))</span>;
+<span class="lnr">13 </span>    <span class="Special">}</span>
+<span class="lnr">14 </span>
+<span class="lnr">15 </span>    <span class="Define">echo</span> &quot;<span class="Special">\n</span>&quot;;
+<span class="lnr">16 </span><span class="Special">}</span>
+</pre>
+
+
+</section><section class="slide" id="cte-4">
+
+
+<h3>Common Table Expressions (CTEs)</h3>
+
+<pre><code>planet 'mars' (satellites 2)
+    [1] - phobos (9 377 km)
+    [2] - deimos (23 460 km)
+
+planet 'jupiter' (satellites 4)
+    [1] - io (421 800 km)
+    [2] - europe (671 100 km)
+    [3] - ganymède (1 070 400 km)
+    [4] - callisto (1 882 700 km)
+</code></pre>
+
+
+</section><section class="slide" id="cte-5">
+
+
+<h3>Common Table Expressions (CTEs)</h3>
+
+<ul>
+<li>permettent de créer des sous ensembles aliasés.</li>
+<li>peuvent s'appeler les unes les autres.</li>
+<li>peuvent être récursives.</li>
+<li>peuvent utiliser [INSERT|UPDATE|DELETE] ... RETURNING</li>
+</ul>
+
+
+</section><section class="slide" id="fdw-1">
+
+
+<h3>Foreign Data Wrapper</h3>
+
+<p>Mapper les sources de données distantes comme des tables Postgres !</p>
+
+<ul>
+<li>Other Pg databases / servers</li>
+<li>Other databases (Oracle, MsSQL, MySQL...)</li>
+<li>Web services (Gmail, Twitter, yours...)</li>
+<li>Your own driver with <em>Multicorn</em> (python)</li>
+</ul>
+
+
+</section><section class="slide" id="php-sql-1">
+
+
+<h3>PHP &amp; Postgresql</h3>
+
+<p>SQL permet de créer des ensembles structurés et extensibles de données attendus par les traitements PHP indépendamment de la structure des tables.</p>
+
+<div class="slide" id="sql-1-1">
+
+
+<p><em>SQL</em></p>
+
+<ul>
+<li>langage déclaratif.</li>
+<li>fortement typé.</li>
+<li>fait pour requêter et manipuler des ensembles.</li>
+</ul>
+
+
+</div><div class="slide" id="sql-1-2">
+
+
+<p><em>PHP</em></p>
+
+<ul>
+<li>langage impératif.</li>
+<li>faiblement typé.</li>
+<li>fait pour du traitement séquentiel.</li>
+</ul>
+
+
+</div>
+</section><section class="slide" id="troll-4">
+
+
+<blockquote>
+  <p>Simplicity is prerequisite for reliability.</p>
+</blockquote>
+
+<p>Edsger W. Dijkstra</p>
+
+
+</section><section class="slide" id="thx">
+
+
+<h3>Thank you !</h3>
+
+<p><img src="images/eleph_laugh.jpg" alt="ALT" /></p>
+
+</section>
+
+<a href="#" class="deck-prev-link" title="Previous">&#8592;</a>
+<a href="#" class="deck-next-link" title="Next">&#8594;</a>
+
+<p class="deck-status">
+    <span class="deck-status-current"></span>
+    /
+    <span class="deck-status-total"></span>
+</p>
+
+<form action="." method="get" class="goto-form">
+    <label for="goto-slide">Go to slide:</label>
+    <input type="text" name="slidenum" id="goto-slide" list="goto-datalist">
+    <datalist id="goto-datalist"></datalist>
+    <input type="submit" value="Go">
+</form>
+
+<a href="." title="Permalink to this slide" class="deck-permalink">#</a>
+
+<!-- Deck Core and extensions -->
+<script src="../vendor/deck.js/jquery-1.7.min.js"></script>
+<script src="../vendor/deck.js/core/deck.core.js"></script>
+<script src="../vendor/deck.js/extensions/hash/deck.hash.js"></script>
+<script src="../vendor/deck.js/extensions/menu/deck.menu.js"></script>
+<script src="../vendor/deck.js/extensions/goto/deck.goto.js"></script>
+<script src="../vendor/deck.js/extensions/status/deck.status.js"></script>
+<script src="../vendor/deck.js/extensions/navigation/deck.navigation.js"></script>
+
+<!-- Specific to this page -->
+<script src="script.js"></script>
+
+</body>
+</html>
